@@ -8,10 +8,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "veiculo", schema = "public")
 public class Veiculo extends AbstractEntity{
-    @Getter
-    @Column(name = "id_veiculo", nullable = false, unique = true)
-    private Long idVeiculo;
-    @Getter @Setter
+   @Getter @Setter
     @Column(name = "placa_carro",nullable = false,unique = true, length = 10)
     private String placaCarro; //not null / unique /tamanho 10
     @Getter @Setter

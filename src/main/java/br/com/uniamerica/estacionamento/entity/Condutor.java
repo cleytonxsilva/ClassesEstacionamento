@@ -11,9 +11,6 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "condutores", schema = "public")
 public class Condutor extends AbstractEntity{
-    @Getter
-    @Column(name = "id_condutor", nullable = false, unique = true)
-    private Long idCondutor;
     @Getter @Setter
     @Column(name = "nome_condutor", nullable = false, length = 50)
     private String nomeCondutor;

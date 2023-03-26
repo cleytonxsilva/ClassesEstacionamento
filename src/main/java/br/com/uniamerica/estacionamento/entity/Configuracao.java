@@ -11,11 +11,7 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "configuracao", schema = "public")
 public class Configuracao extends AbstractEntity{
-
-    @Getter
-    @Column(name = "id_configuracao", nullable = false, unique = true)
-    private Long idConfiguracao;
-    @Getter @Setter
+@Getter @Setter
     @Column(name = "valor_hora")
     private BigDecimal valorHora;
     @Getter @Setter

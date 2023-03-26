@@ -10,16 +10,13 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "movimentacao", schema = "public")
 public class Movimentacao extends AbstractEntity{
-    @Getter
-    @Column(name = "id_movimentacao",nullable = false, unique = true)
-    private Long idMovimentacao;
     @Getter @Setter
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "movimentacao_veiculo", nullable = false, unique = true)
+    @JoinColumn(name = "id_veiculo", nullable = false, unique = true)
     private Veiculo veiculo;
     @Getter @Setter
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "condutor", nullable = false)
+    @JoinColumn(name = "id_condutor", nullable = false)
     private Condutor condutor;
     @Getter @Setter
     @Column(name = "entrada",nullable = false)
