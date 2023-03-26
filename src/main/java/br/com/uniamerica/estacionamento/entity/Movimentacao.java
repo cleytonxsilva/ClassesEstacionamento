@@ -14,21 +14,8 @@ public class Movimentacao extends AbstractEntity{
     @Column(name = "id_movimentacao",nullable = false, unique = true)
     private Long idMovimentacao;
     @Getter @Setter
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "movimentacao_veiculo",
-            uniqueConstraints = @UniqueConstraint(
-                    columnNames = {
-                            "id_movimentacao",
-                            "id_veiculo"
-                    }
-            ),
-            joinColumns = @JoinColumn(
-                    name = "id_movimentacao"
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name = "id_veiculo"
-            )
-    )
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "movimentacao_veiculo", nullable = false, unique = true)
     private Veiculo veiculo;
     @Getter @Setter
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
