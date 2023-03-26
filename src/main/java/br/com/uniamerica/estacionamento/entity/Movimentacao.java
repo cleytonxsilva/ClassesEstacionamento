@@ -48,5 +48,4 @@ public class Movimentacao extends AbstractEntity{
     @Getter @Setter
     @Column(name = "valor_hora_multa")
     private BigDecimal valorHoraMulta;
-
 }
