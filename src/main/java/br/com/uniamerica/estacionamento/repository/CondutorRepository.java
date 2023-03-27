@@ -9,11 +9,4 @@ import java.util.Optional;
 
 @Repository
 public interface CondutorRepository extends JpaRepository<Condutor, Long>{
-    @Override
-    List<Condutor> findAllById(Iterable<Long> longs);
-    @Override
-    Optional<Condutor> findById(Long aLong);
-
-    @Override
-    List<Condutor> findAll();
 }

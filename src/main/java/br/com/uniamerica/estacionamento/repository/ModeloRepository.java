@@ -10,11 +10,4 @@ import java.util.Optional;
 
 @Repository
 public interface ModeloRepository extends JpaRepository<Modelo, Long> {
-    @Override
-    List<Modelo> findAllById(Iterable<Long> longs);
-
-    @Override
-    Optional<Modelo> findById(Long aLong);
-    @Override
-    List<Modelo> findAll();
 }

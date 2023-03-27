@@ -9,11 +9,4 @@ import java.util.Optional;
 
 @Repository
 public interface ConfiguracaoRepository extends JpaRepository<Movimentacao, Long> {
-    @Override
-    List<Movimentacao> findAllById(Iterable<Long> longs);
-
-    @Override
-    Optional<Movimentacao> findById(Long aLong);
-    @Override
-    List<Movimentacao> findAll();
 }

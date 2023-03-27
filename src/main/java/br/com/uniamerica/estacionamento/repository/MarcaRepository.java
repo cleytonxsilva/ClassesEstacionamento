@@ -9,10 +9,4 @@ import java.util.Optional;
 
 @Repository
 public interface MarcaRepository extends JpaRepository<Marca, Long> {
-    @Override
-    List<Marca> findAllById(Iterable<Long> longs);
-    @Override
-    Optional<Marca> findById(Long aLong);
-    @Override
-    List<Marca> findAll();
 }
