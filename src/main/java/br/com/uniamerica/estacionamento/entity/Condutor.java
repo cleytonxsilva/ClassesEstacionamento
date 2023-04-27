@@ -5,11 +5,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 @Entity
+@Audited
 @Table(name = "condutores", schema = "public")
+@AuditTable(value = "condutores_audit", schema = "audit")
 public class Condutor extends AbstractEntity{
     @Getter @Setter
     @Column(name = "nome_condutor", nullable = false, length = 50)
