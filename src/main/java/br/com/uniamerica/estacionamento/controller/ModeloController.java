@@ -21,7 +21,7 @@ public class ModeloController {
         this.modeloRepository = modeloRepository;}
     */
 
-    /* http://localhost:8080/api/modelo/1 */
+    /* http://localhost:8080/api/modelo/1
     @GetMapping("/{id}")
     public ResponseEntity<?> findByIdPath(@PathVariable("id") final Long id){
         final Modelo modelo = this.modeloRepository.findById(id).orElse(null);
@@ -29,6 +29,7 @@ public class ModeloController {
             ? ResponseEntity.badRequest().body("Nenhum valor encontrado")
             : ResponseEntity.ok(modelo);
     }
+*/
 
     /* http://localhost:8080/api/modelo?id=1 */
     @GetMapping
