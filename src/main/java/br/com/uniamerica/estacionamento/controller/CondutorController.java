@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping(value = "/api/condutor")
 public class CondutorController {
@@ -25,6 +27,12 @@ public class CondutorController {
     public ResponseEntity<?> listaCompleta(){
         return ResponseEntity.ok(this.condutorRepository.findAll());
     }
+
+//    @GetMapping("/ativos")
+//    public ResponseEntity<?> findByAtivos(){
+//        final List<Condutor> condutores = this.condutorRepository.findByAtivos();
+//            return ResponseEntity.ok(condutores);
+//    }
     @PostMapping
     public ResponseEntity<?> cadastrar(@RequestBody final Condutor condutor) {
         try {

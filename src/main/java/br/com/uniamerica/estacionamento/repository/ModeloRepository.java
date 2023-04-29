@@ -10,4 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface ModeloRepository extends JpaRepository<Modelo, Long> {
+    //List<Modelo> findByAtivos();
 }

@@ -9,4 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface MarcaRepository extends JpaRepository<Marca, Long> {
+    //List<Marca> findByAtivos();
 }

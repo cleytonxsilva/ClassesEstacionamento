@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 @Entity
 @Audited
-@Table(name = "condutores", schema = "public")
+@Table(name = "condutor", schema = "public")
 @AuditTable(value = "condutores_audit", schema = "audit")
 public class Condutor extends AbstractEntity{
     @Getter @Setter
@@ -25,7 +25,7 @@ public class Condutor extends AbstractEntity{
     @Column(name = "telefone", nullable = false, length = 20)
     private String telefone;
     @Getter @Setter
-    @Column(name = "tempo_pago", nullable = false)
+    @Column(name = "tempo_pago")
     private LocalTime tempoPago;
     @Getter @Setter
     @Column(name = "tempo_desconto")

@@ -21,12 +21,12 @@ public class Veiculo extends AbstractEntity{
 
     @Enumerated(EnumType.STRING)
     @Getter @Setter
-    @Column(name = "cor", nullable = false, length = 20)
+    @Column(name = "cor", length = 20)
     private Cor cor;
 
     @Enumerated(EnumType.STRING)
     @Getter @Setter
-    @Column(name = "tipo_veiculo", nullable = false, length = 6)
+    @Column(name = "tipo_veiculo", length = 6)
     private TipoVeiculo tipo;
 
 }

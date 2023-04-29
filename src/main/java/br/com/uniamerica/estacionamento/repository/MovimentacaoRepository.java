@@ -10,4 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface MovimentacaoRepository extends JpaRepository<Movimentacao, Long>{
+    //List<Movimentacao> findByAbertas();
 }

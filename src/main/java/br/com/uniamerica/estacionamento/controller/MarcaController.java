@@ -1,5 +1,6 @@
 package br.com.uniamerica.estacionamento.controller;
 
+import br.com.uniamerica.estacionamento.entity.Condutor;
 import br.com.uniamerica.estacionamento.entity.Marca;
 import br.com.uniamerica.estacionamento.repository.MarcaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/api/marca")
@@ -25,6 +28,11 @@ public class MarcaController {
     public ResponseEntity<?> listaCompleta(){
         return ResponseEntity.ok(this.marcaRepository.findAll());
     }
+//    @GetMapping("/ativos")
+//    public ResponseEntity<?> findByAtivos(){
+//        final List<Marca> marcas = this.marcaRepository.findByAtivos();
+//        return ResponseEntity.ok(marcas);
+//    }
     @PostMapping
     public ResponseEntity<?> cadastrar(@RequestBody final Marca marca) {
         try {
