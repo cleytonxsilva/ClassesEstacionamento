@@ -1,8 +1,10 @@
 package br.com.uniamerica.estacionamento.controller;
 
-import br.com.uniamerica.estacionamento.entity.Condutor;
+
 import br.com.uniamerica.estacionamento.entity.Marca;
+import br.com.uniamerica.estacionamento.entity.Modelo;
 import br.com.uniamerica.estacionamento.repository.MarcaRepository;
+import br.com.uniamerica.estacionamento.repository.ModeloRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import java.util.List;
 public class MarcaController {
     @Autowired
     private MarcaRepository marcaRepository;
+    private ModeloRepository modeloRepository;
 
     @GetMapping
     public ResponseEntity<?> findByIdRequest(@RequestParam("id") final Long id){
@@ -28,11 +31,12 @@ public class MarcaController {
     public ResponseEntity<?> listaCompleta(){
         return ResponseEntity.ok(this.marcaRepository.findAll());
     }
-//    @GetMapping("/ativos")
-//    public ResponseEntity<?> findByAtivos(){
-//        final List<Marca> marcas = this.marcaRepository.findByAtivos();
-//        return ResponseEntity.ok(marcas);
-//    }
+
+    @GetMapping("/ativos")
+    public ResponseEntity<?> findByAtivo(){
+        final List<Marca> marcas = this.marcaRepository.findByAtivo(true);
+        return ResponseEntity.ok(marcas);
+    }
     @PostMapping
     public ResponseEntity<?> cadastrar(@RequestBody final Marca marca) {
         try {
@@ -64,8 +68,33 @@ public class MarcaController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> excluir(@RequestBody final Marca marca){
-        this.marcaRepository.delete(marca);
-        return ResponseEntity.ok("Registro excluido com sucesso");
+    public ResponseEntity<?> excluir(@RequestParam("id") final Long id){
+        try {
+            final Marca marca = this.marcaRepository.findById(id).orElse(null);
+            if(marca == null){
+                throw new Exception("Registro inexistente");
+            }
+
+            final List<Modelo> modelos = this.modeloRepository.findAll();
+
+            for(Modelo modelo : modelos){
+                if(marca.equals(modelo.getMarca())){
+                    marca.setAtivo(false);
+                    this.marcaRepository.save(marca);
+                    return ResponseEntity.ok("Registro não está ativo");
+                }
+            }
+
+            if(marca.isAtivo()){
+                this.marcaRepository.delete(marca);
+                return ResponseEntity.ok("Registro deletado com sucesso");
+            }
+            else{
+                throw new Exception("Não foi possível excluir o registro");
+            }
+        }
+        catch (Exception e){
+            return ResponseEntity.internalServerError().body("Error " + e.getMessage());
+        }
     }
 }

@@ -1,7 +1,9 @@
 package br.com.uniamerica.estacionamento.controller;
 
 import br.com.uniamerica.estacionamento.entity.Condutor;
+import br.com.uniamerica.estacionamento.entity.Movimentacao;
 import br.com.uniamerica.estacionamento.repository.CondutorRepository;
+import br.com.uniamerica.estacionamento.repository.MovimentacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import java.util.List;
 public class CondutorController {
     @Autowired
     private CondutorRepository condutorRepository;
+    private MovimentacaoRepository movimentacaoRepository;
 
     @GetMapping
     public ResponseEntity<?> findByIdRequest(@RequestParam("id") final Long id){
@@ -28,11 +31,11 @@ public class CondutorController {
         return ResponseEntity.ok(this.condutorRepository.findAll());
     }
 
-//    @GetMapping("/ativos")
-//    public ResponseEntity<?> findByAtivos(){
-//        final List<Condutor> condutores = this.condutorRepository.findByAtivos();
-//            return ResponseEntity.ok(condutores);
-//    }
+    @GetMapping("/ativos")
+    public ResponseEntity<?> findByAtivo(){
+        final List<Condutor> condutores = this.condutorRepository.findByAtivo(true);
+            return ResponseEntity.ok(condutores);
+    }
     @PostMapping
     public ResponseEntity<?> cadastrar(@RequestBody final Condutor condutor) {
         try {
@@ -63,9 +66,38 @@ public class CondutorController {
         }
     }
 
+//    @DeleteMapping
+//    public ResponseEntity<?> excluir(@RequestBody final Condutor condutor){
+//        this.condutorRepository.delete(condutor);
+//        return ResponseEntity.ok("Registro excluido com sucesso");
+//    }
     @DeleteMapping
-    public ResponseEntity<?> excluir(@RequestBody final Condutor condutor){
-        this.condutorRepository.delete(condutor);
-        return ResponseEntity.ok("Registro excluido com sucesso");
+    public ResponseEntity<?> excluir(@RequestParam("id") final Long id){
+        try {
+            final Condutor condutor = this.condutorRepository.findById(id).orElse(null);
+            if(condutor == null){
+                throw new Exception("Registro inexistente");
+            }
+
+            final List<Movimentacao> movimentacoes = this.movimentacaoRepository.findAll();
+            for(Movimentacao movimentacao : movimentacoes){
+                if(condutor.equals(movimentacao.getCondutor())){
+                    condutor.setAtivo(false);
+                    this.condutorRepository.save(condutor);
+                    return ResponseEntity.ok("Registro não está ativo");
+                }
+            }
+
+            if(condutor.isAtivo()){
+                this.condutorRepository.delete(condutor);
+                return ResponseEntity.ok("Registro deletado com sucesso");
+            }
+            else{
+                throw new Exception("Não foi possível excluir o registro");
+            }
+        }
+        catch (Exception e){
+            return ResponseEntity.internalServerError().body("Error" + e.getMessage());
+        }
     }
 }

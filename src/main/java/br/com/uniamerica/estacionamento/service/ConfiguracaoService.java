@@ -6,8 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ConfiguracaoService {
-    @Transactional(rollbackFor = Exception.class)
-    public void cadastrar(final Configuracao configuracao) {
-
-    }
+//    @Transactional(rollbackFor = Exception.class)
+//    public void cadastrar(final Configuracao configuracao) {
+//
+//    }
 }

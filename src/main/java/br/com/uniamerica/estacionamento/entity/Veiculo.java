@@ -17,7 +17,7 @@ public class Veiculo extends AbstractEntity{
     @Getter @Setter
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "modelo_carro", nullable = false)
-    private Modelo modeloCarro;
+    private Modelo modelo;
 
     @Enumerated(EnumType.STRING)
     @Getter @Setter
@@ -28,5 +28,6 @@ public class Veiculo extends AbstractEntity{
     @Getter @Setter
     @Column(name = "tipo_veiculo", length = 6)
     private TipoVeiculo tipo;
+
 
 }

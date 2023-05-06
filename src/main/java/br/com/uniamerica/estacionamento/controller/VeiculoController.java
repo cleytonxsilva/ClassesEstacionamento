@@ -1,7 +1,9 @@
 package br.com.uniamerica.estacionamento.controller;
 
-import br.com.uniamerica.estacionamento.entity.Condutor;
+
+import br.com.uniamerica.estacionamento.entity.Movimentacao;
 import br.com.uniamerica.estacionamento.entity.Veiculo;
+import br.com.uniamerica.estacionamento.repository.MovimentacaoRepository;
 import br.com.uniamerica.estacionamento.repository.VeiculoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,6 +18,7 @@ import java.util.List;
 public class VeiculoController {
     @Autowired
     private VeiculoRepository veiculoRepository;
+    private MovimentacaoRepository movimentacaoRepository;
 
     @GetMapping
     public ResponseEntity<?> findByIdRequest(@RequestParam("id") final Long id){
@@ -28,11 +31,12 @@ public class VeiculoController {
     public ResponseEntity<?> listaCompleta(){
         return ResponseEntity.ok(this.veiculoRepository.findAll());
     }
-//    @GetMapping("/ativos")
-//    public ResponseEntity<?> findByAtivos(){
-//        final List<Veiculo> veiculos = this.veiculoRepository.findByAtivos();
-//        return ResponseEntity.ok(veiculos);
-//    }
+
+    @GetMapping("/ativos")
+    public ResponseEntity<?> findByAtivo(){
+        final List<Veiculo> veiculos = this.veiculoRepository.findByAtivo(true);
+        return ResponseEntity.ok(veiculos);
+    }
     @PostMapping
     public ResponseEntity<?> cadastrar(@RequestBody final Veiculo veiculo) {
         try {
@@ -64,8 +68,32 @@ public class VeiculoController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> excluir(@RequestBody final Veiculo veiculo){
-        this.veiculoRepository.delete(veiculo);
-        return ResponseEntity.ok("Registro excluido com sucesso");
+    public ResponseEntity<?> excluir(@RequestParam("id") final Long id){
+        try {
+            final Veiculo veiculo = this.veiculoRepository.findById(id).orElse(null);
+            if(veiculo == null){
+                throw new Exception("Registro inexistente");
+            }
+
+            final List<Movimentacao> movimentacaos = this.movimentacaoRepository.findAll();
+            for(Movimentacao movimentacao : movimentacaos){
+                if(veiculo.equals(movimentacao.getVeiculo())){
+                    veiculo.setAtivo(false);
+                    this.veiculoRepository.save(veiculo);
+                    return ResponseEntity.ok("Registro não está mais ativo");
+                }
+            }
+
+            if(veiculo.isAtivo()){
+                this.veiculoRepository.delete(veiculo);
+                return ResponseEntity.ok("Registro deletado com sucesso");
+            }
+            else{
+                throw new Exception("Não foi possível excluir o registro");
+            }
+        }
+        catch (Exception e){
+            return ResponseEntity.internalServerError().body("Error" + e.getMessage());
+        }
     }
 }

@@ -12,8 +12,7 @@ import java.util.Optional;
 @Repository
 public interface CondutorRepository extends JpaRepository<Condutor, Long>{
 
-//    @Query("SELECT * FROM AbstractEntity WHERE ativo = ?", nativeQuery = true)
-//    List<Condutor> findByAtivos(Boolean ativo);
-//
-//    List<Condutor> findByAtivos();
+
+    List<Condutor> findByAtivo(boolean ativo);
+
 }

@@ -1,14 +1,14 @@
 package br.com.uniamerica.estacionamento.controller;
 
-import br.com.uniamerica.estacionamento.entity.Condutor;
+
 import br.com.uniamerica.estacionamento.entity.Modelo;
+import br.com.uniamerica.estacionamento.entity.Veiculo;
 import br.com.uniamerica.estacionamento.repository.ModeloRepository;
+import br.com.uniamerica.estacionamento.repository.VeiculoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +18,7 @@ import java.util.List;
 public class ModeloController {
     @Autowired
     private ModeloRepository modeloRepository;
+    private VeiculoRepository veiculoRepository;
 
     /*
     public ModeloController(ModeloRepository modeloRepository){
@@ -47,11 +48,12 @@ public class ModeloController {
     public ResponseEntity<?> listaCompleta(){
         return ResponseEntity.ok(this.modeloRepository.findAll());
     }
-//    @GetMapping("/ativos")
-//    public ResponseEntity<?> findByAtivos(){
-//        final List<Modelo> modelos = this.modeloRepository.findByAtivos();
-//        return ResponseEntity.ok(modelos);
-//    }
+
+    @GetMapping("/ativos")
+    public ResponseEntity<?> findByAtivo(){
+        final List<Modelo> modelos = this.modeloRepository.findByAtivo(true);
+        return ResponseEntity.ok(modelos);
+    }
 
     /* http://localhost:8080/api/modelo --POST */
     @PostMapping
@@ -86,8 +88,33 @@ public class ModeloController {
 
     /* http://localhost:8080/api/modelo --DELETE */
     @DeleteMapping
-    public ResponseEntity<?> excluir(@RequestBody final Modelo modelo){
-    this.modeloRepository.delete(modelo);
-    return ResponseEntity.ok("Registro excluido com sucesso");
+    public ResponseEntity<?> excluir(@RequestParam("id") final Long id){
+        try {
+            final Modelo modelo = this.modeloRepository.findById(id).orElse(null);
+            if(modelo == null){
+                throw new Exception("Registro inexistente");
+            }
+
+            final List<Veiculo> veiculos = this.veiculoRepository.findAll();
+
+            for(Veiculo veiculo : veiculos){
+                if(modelo.equals(veiculo.getModelo())){
+                    modelo.setAtivo(false);
+                    this.modeloRepository.save(modelo);
+                    return ResponseEntity.ok("Registro não está mais ativo");
+                }
+            }
+
+            if(modelo.isAtivo()){
+                this.modeloRepository.delete(modelo);
+                return ResponseEntity.ok("Registro deletado com sucesso");
+            }
+            else{
+                throw new Exception("Não foi possível excluir o registro");
+            }
+        }
+        catch (Exception e){
+            return ResponseEntity.internalServerError().body("Error" + e.getMessage());
+        }
     }
 }

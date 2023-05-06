@@ -1,6 +1,5 @@
 package br.com.uniamerica.estacionamento.controller;
 
-import br.com.uniamerica.estacionamento.entity.Condutor;
 import br.com.uniamerica.estacionamento.entity.Movimentacao;
 import br.com.uniamerica.estacionamento.repository.MovimentacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +27,12 @@ public class MovimentacaoController {
     public ResponseEntity<?> listaCompleta(){
         return ResponseEntity.ok(this.movimentacaoRepository.findAll());
     }
-//    @GetMapping("/abertas")
-//    public ResponseEntity<?> findByAbertas(){
-//        final List<Movimentacao> movimentacoes = this.movimentacaoRepository.findByAbertas();
-//        return ResponseEntity.ok(this.movimentacaoRepository.findByAbertas());
-//    }
+    @GetMapping("/abertas")
+    public ResponseEntity<?> findByAberta(){
+        final List<Movimentacao> movimentacoes = this.movimentacaoRepository.findBySaidaIsNull();
+        return ResponseEntity.ok(movimentacoes);
+    }
+
     @PostMapping
     public ResponseEntity<?> cadastrar(@RequestBody final Movimentacao movimentacao) {
         try {
@@ -64,8 +64,20 @@ public class MovimentacaoController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> excluir(@RequestBody final Movimentacao movimentacao){
-        this.movimentacaoRepository.delete(movimentacao);
-        return ResponseEntity.ok("Registro excluido com sucesso");
+    public ResponseEntity<?> excluir(@RequestParam("id") final Long id){
+        try {
+            final Movimentacao movimentacao = this.movimentacaoRepository.findById(id).orElse(null);
+            if(movimentacao == null){
+                throw new Exception("Registro inexistente");
+            }
+
+            movimentacao.setAtivo(false);
+            this.movimentacaoRepository.delete(movimentacao);
+            return ResponseEntity.ok("Registro não está mais ativo");
+        }
+        catch (Exception e){
+            return ResponseEntity.internalServerError().body("Error" + e.getMessage());
+        }
     }
+
 }
