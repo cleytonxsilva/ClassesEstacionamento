@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface ConfiguracaoRepository extends JpaRepository<Configuracao, Long> {
-    void save();
+
 }

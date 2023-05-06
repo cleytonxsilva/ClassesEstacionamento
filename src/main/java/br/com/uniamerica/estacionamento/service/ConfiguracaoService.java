@@ -26,8 +26,8 @@ public class ConfiguracaoService {
         return configuracaoRepository.findById(id);
     }
 
-    public void save(Configuracao configuracao) {
-        configuracaoRepository.save();    //DANDO B.O ---------------<<<<<<
+    public Configuracao save(Configuracao configuracao) {
+        return configuracaoRepository.save(configuracao);
     }
 
 
