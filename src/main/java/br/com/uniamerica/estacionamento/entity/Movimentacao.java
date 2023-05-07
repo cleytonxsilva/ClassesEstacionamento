@@ -12,11 +12,11 @@ import java.time.LocalTime;
 public class Movimentacao extends AbstractEntity{
     @Getter @Setter
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_veiculo", nullable = false, unique = true)
+    @JoinColumn(name = "veiculo", nullable = false, unique = true)
     private Veiculo veiculo;
     @Getter @Setter
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_condutor", nullable = false)
+    @JoinColumn(name = "condutor", nullable = false)
     private Condutor condutor;
     @Getter @Setter
     @Column(name = "entrada",nullable = false)

@@ -2,7 +2,6 @@ package br.com.uniamerica.estacionamento.service;
 
 import br.com.uniamerica.estacionamento.entity.Condutor;
 import br.com.uniamerica.estacionamento.repository.CondutorRepository;
-import br.com.uniamerica.estacionamento.repository.MovimentacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +17,6 @@ import static java.util.Objects.isNull;
 public class CondutorService {
     @Autowired
     private CondutorRepository condutorRepository;
-    private MovimentacaoRepository movimentacaoRepository;
 
     @Transactional(rollbackFor = Exception.class)
     public void cadastrar(final Condutor condutor) {
@@ -31,6 +29,7 @@ public class CondutorService {
         }
         condutorRepository.save(condutor);
     }
+
 
     public Optional<Condutor> findById(Long id) {
         return condutorRepository.findById(id);
@@ -47,9 +46,9 @@ public class CondutorService {
 
     @Transactional(rollbackFor = Exception.class)
     public void excluir (final Long id){
-        Optional<Condutor> excluirMarca = condutorRepository.findById(id);
-        if(isNull(excluirMarca)){
-            throw new RuntimeException("Marca não encontrada");
+        Optional<Condutor> excluirCondutor = condutorRepository.findById(id);
+        if(isNull(excluirCondutor)){
+            throw new RuntimeException("Condutor não encontrado");
         }
         condutorRepository.deleteById(id);
     }
