@@ -3,7 +3,6 @@ package br.com.uniamerica.estacionamento.controller;
 
 import br.com.uniamerica.estacionamento.entity.Marca;
 import br.com.uniamerica.estacionamento.entity.Modelo;
-import br.com.uniamerica.estacionamento.repository.MarcaRepository;
 import br.com.uniamerica.estacionamento.repository.ModeloRepository;
 import br.com.uniamerica.estacionamento.service.MarcaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,7 @@ import java.util.List;
 public class MarcaController {
     @Autowired
     private MarcaService marcaService;
+    @Autowired
     private ModeloRepository modeloRepository;
 
     @GetMapping

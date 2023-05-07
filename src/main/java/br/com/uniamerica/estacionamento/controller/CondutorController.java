@@ -85,7 +85,7 @@ public class CondutorController {
             }
 
             if(condutor.isAtivo()){
-                this.condutorService.delete(condutor);
+                this.condutorService.excluir(id);
                 return ResponseEntity.ok("Registro deletado com sucesso");
             }
             else{

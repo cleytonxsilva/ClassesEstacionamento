@@ -29,5 +29,8 @@ public class Veiculo extends AbstractEntity{
     @Column(name = "tipo_veiculo", length = 6)
     private TipoVeiculo tipo;
 
+    public Modelo getModelo() {
+     return null;
+    }
 
 }

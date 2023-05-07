@@ -3,6 +3,7 @@ package br.com.uniamerica.estacionamento.service;
 
 import br.com.uniamerica.estacionamento.entity.Marca;
 import br.com.uniamerica.estacionamento.repository.MarcaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,12 +14,13 @@ import static java.util.Objects.isNull;
 
 @Service
 public class MarcaService {
+    @Autowired
     private MarcaRepository marcaRepository;
 
     @Transactional(rollbackFor = Exception.class)
     public void cadastrar(final Marca nome) {
         if(isNull(nome.getNome())){
-            throw new RuntimeException("Nome de marca não pode ser nulo!");
+            throw new RuntimeException("O campo Marca não pode ser nulo!");
         }
         Marca findByMarca = marcaRepository.findByMarca(nome);
         if(!isNull(findByMarca)){

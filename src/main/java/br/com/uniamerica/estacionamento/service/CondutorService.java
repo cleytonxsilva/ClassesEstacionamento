@@ -1,16 +1,13 @@
 package br.com.uniamerica.estacionamento.service;
 
 import br.com.uniamerica.estacionamento.entity.Condutor;
-import br.com.uniamerica.estacionamento.entity.Movimentacao;
 import br.com.uniamerica.estacionamento.repository.CondutorRepository;
 import br.com.uniamerica.estacionamento.repository.MovimentacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+
+
 
 import java.util.List;
 import java.util.Optional;
@@ -48,6 +45,12 @@ public class CondutorService {
     }
 
 
-    public void delete(Condutor condutor) {
+    @Transactional(rollbackFor = Exception.class)
+    public void excluir (final Long id){
+        Optional<Condutor> excluirMarca = condutorRepository.findById(id);
+        if(isNull(excluirMarca)){
+            throw new RuntimeException("Marca não encontrada");
+        }
+        condutorRepository.deleteById(id);
     }
 }
