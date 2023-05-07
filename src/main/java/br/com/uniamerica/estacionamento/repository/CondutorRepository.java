@@ -12,7 +12,8 @@ import java.util.Optional;
 @Repository
 public interface CondutorRepository extends JpaRepository<Condutor, Long>{
 
-
     List<Condutor> findByAtivo(boolean ativo);
+    @Query("select c from Condutor c where c.cpf = :#{#condutor.cpf}")
+    Condutor findByCpf (@Param("condutor") Condutor condutor);
 
 }

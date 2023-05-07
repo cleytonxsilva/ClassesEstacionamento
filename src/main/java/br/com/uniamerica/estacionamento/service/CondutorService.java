@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Objects.isNull;
+
 @Service
 public class CondutorService {
     @Autowired
@@ -23,7 +25,14 @@ public class CondutorService {
 
     @Transactional(rollbackFor = Exception.class)
     public void cadastrar(final Condutor condutor) {
-
+        if(isNull(condutor.getNomeCondutor()) || isNull((condutor.getCpf())) || isNull(condutor.getTelefone())){
+            throw new RuntimeException("Nome,CPF e Telefone são obrigatórios");
+        }
+        Condutor findByCpf = condutorRepository.findByCpf(condutor);
+        if(!isNull(findByCpf)){
+            throw new RuntimeException("CPF já cadastrado");
+        }
+        condutorRepository.save(condutor);
     }
 
     public Optional<Condutor> findById(Long id) {
@@ -38,55 +47,7 @@ public class CondutorService {
         return condutorRepository.findByAtivo(true);
     }
 
-    public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Condutor condutor){
-        try{
-            final Condutor condutorBanco = this.condutorRepository.findById(id).orElse(null);
 
-            if(condutorBanco == null || !condutorBanco.getId().equals(condutor.getId()))
-            {
-                throw new RuntimeException("Não foi possível identificar o registro informado");
-            }
-
-            this.condutorRepository.save(condutor);
-            return ResponseEntity.ok("Registro editado com sucesso");
-        }
-        catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Error " + e.getCause().getCause().getMessage());
-        }
-        catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("Error " + e.getMessage());
-        }
-    }
-
-    public ResponseEntity<?> excluir(@RequestParam("id") final Long id){
-        try {
-            final Condutor condutor = this.condutorRepository.findById(id).orElse(null);
-            if(condutor == null){
-                throw new Exception("Registro inexistente");
-            }
-
-            final List<Movimentacao> movimentacoes = this.movimentacaoRepository.findAll();
-            for(Movimentacao movimentacao : movimentacoes){
-                if(condutor.equals(movimentacao.getCondutor())){
-                    condutor.setAtivo(false);
-                    this.condutorRepository.save(condutor);
-                    return ResponseEntity.ok("Registro não está ativo");
-                }
-            }
-
-            if(condutor.isAtivo()){
-                this.condutorRepository.delete(condutor);
-                return ResponseEntity.ok("Registro deletado com sucesso");
-            }
-            else{
-                throw new Exception("Não foi possível excluir o registro");
-            }
-        }
-        catch (Exception e){
-            return ResponseEntity.internalServerError().body("Error" + e.getMessage());
-        }
-    }
-
-    public void save(Condutor condutor) {
+    public void delete(Condutor condutor) {
     }
 }

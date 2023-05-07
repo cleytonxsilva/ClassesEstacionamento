@@ -24,10 +24,29 @@ public class ConfiguracaoController {
     @PostMapping
     public ResponseEntity<?> cadastrar(@RequestBody final Configuracao configuracao) {
         try {
-            this.configuracaoService.save(configuracao);
+            this.configuracaoService.cadastrar(configuracao);
             return ResponseEntity.ok("Registro cadastrado com sucesso");
         } catch (DataIntegrityViolationException e) {
             return ResponseEntity.internalServerError().body("Error" + e.getCause().getCause().getMessage());
+        }
+    }
+    public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Configuracao configuracao){
+        try{
+            final Configuracao configuracaoBanco = this.configuracaoService.findById(id).orElse(null);
+
+            if(configuracaoBanco == null || configuracaoBanco.getId().equals(configuracao.getId()))
+            {
+                throw new RuntimeException("Não foi possível identificar o registro informado");
+            }
+
+            this.configuracaoService.cadastrar(configuracao);
+            return ResponseEntity.ok("Registro editado com sucesso");
+        }
+        catch (DataIntegrityViolationException e){
+            return ResponseEntity.internalServerError().body("Error " + e.getCause().getCause().getMessage());
+        }
+        catch (RuntimeException e){
+            return ResponseEntity.internalServerError().body("Error " + e.getMessage());
         }
     }
 }
