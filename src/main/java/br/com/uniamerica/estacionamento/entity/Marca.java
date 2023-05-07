@@ -15,6 +15,6 @@ import java.time.LocalDateTime;
 @AuditTable(value = "marcas_audit", schema = "audit")
 public class Marca extends AbstractEntity{
     @Getter @Setter
-    @Column(name = "nome_marca", nullable = false, unique = true, length = 50)
-    private String nomeMarca;
+    @Column(name = "nome", nullable = false, unique = true, length = 50)
+    private String nome;
 }
